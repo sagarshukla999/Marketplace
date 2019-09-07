@@ -1,0 +1,794 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="./Styles.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous"
+        />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.4/angular-material.min.css">
+    </head>
+    <body class="center" ng-app="form" ng-controller="FormController">
+        
+      <!-- <div id="fb-root"></div> -->
+     <div class="col-sm-12 col-md-9" style="display:inline-block;background-color:#1F2227; color: white;padding: 1px">
+  <h2 style="margin: 30px">Product Search</h2>
+  <form name="form" class="col-sm-12 col-md-9" style="text-align:left;display:inline-block" >
+  
+    <div class="form-group row">
+      <label for="Keyword" class="padd col-md-3 col-form-label"
+        >Keyword<span style="color:red">*</span></label>
+      <div class="col-md-8" style="padding: 0px">
+        <input type="text" ng-class="form.Keyword.$invalid&&form.Keyword.$touched? 'form-control errorborder' : 'form-control'" id="Keyword" name="Keyword" placeholder="Enter Product Name (eg. iPhone 8)" 
+        ng-model="formdetails.keyword"
+        ng-required="true"/>
+          <div ng-show="form.Keyword.$invalid&&form.Keyword.$touched" style="color:red;font-size: small;" > 
+            Please enter a keyword
+          </div>
+      </div>
+    </div>
+    <!-- Category -->
+    <div class="form-group row">
+      <label for="Category" class="padd col-md-3 col-form-label">Category</label>
+      <div class="controlwidth">
+        <select ng-model="formdetails.category" id="Category" class="form-control controlwidth">
+          <option value="AllCategories" default>All Categories</option>
+          <option value="550"> Art</option>
+          <option value="2984"> Baby</option>
+          <option value="267">Books</option>
+          <option value="11450"> Clothing, Shoes & Accessories</option>
+          <option value="58058">Computers/Tablets & Networking </option>
+          <option value="26395"> Health & Beauty </option>
+          <option value="11233"> Music</option>
+          <option value="1249">Video Games & Consoles</option>
+        </select>
+      </div>
+    </div>
+    <!-- Condition -->
+    <div class="form-group row">
+      <label for="Conditiondiv" class="padd col-md-3 col-form-label">Condition</label>
+      <div class="col-md-8" id="Conditiondiv" style="padding-left: 0px">
+        <div class="form-check form-check-inline">
+          <input ng-model="formdetails.New" class="form-check-input" type="checkbox" id="new" value="new" name="Condition"/>
+          <label class="form-check-label" for="new">New</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input ng-model="formdetails.Used" class="form-check-input" type="checkbox" id="Used" value="Used" name="Condition"/>
+          <label for="Used" class="form-check-label">Used</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input ng-model="formdetails.Unspecified"
+            class="form-check-input" type="checkbox" id="Unspecified" value="Unspecified" name="Condition"/>
+          <label class="form-check-label" for="Unspecified">Unspecified</label>
+        </div>
+      </div>
+    </div>
+    <!-- Shipping options -->
+    <div class="form-group row">
+      <label for="shippingdiv" class="padd col-md-3 col-form-label">Shipping Options</label>
+      <div id="shippingdiv" class="col-md-8" style="padding-left: 0px">
+        <div class="form-check form-check-inline">
+          <input ng-model="formdetails.Shipping.Local"  class="form-check-input"
+            type="checkbox"
+            id="local"
+            value="local"
+            name="Shipping"
+          />
+          <label class="form-check-label" for="local">Local Pickup</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="free"
+            value="free"
+            name="Shipping"
+            ng-model="formdetails.Shipping.Free"
+          />
+          <label class="form-check-label" for="free">Free Shipping</label>
+        </div>
+      </div>
+    </div>
+    <!-- Distance -->
+    <div class="form-group row">
+      <label for="Distance" class="padd col-md-3 col-form-label"
+        >Distance(Miles)</label
+      >
+      <input
+        type="text"
+        class="form-control col-md-4"
+        id="Distance"
+        placeholder="10"
+        ng-model="formdetails.Distance"
+      />
+    </div>
+    <!-- From -->
+    <div class="form-group row">
+      <label for="From" class="padd col-md-3 col-form-label"
+        >From<span style="color:red">*</span></label
+      >
+      <div class="col-md-8" style="padding: 0px;">
+        <div class="form-check">
+          <input
+            ng-model="loc"
+            class="form-check-input"
+            type="radio"
+            name="From"
+            id="current"
+            value="current"
+            ng-click="changeTotal(true)"
+            checked
+          />
+          <input type="text" ng-model="formdetails.currentZip"  style="display: none" id="currentZip"/>
+          <!-- ng-model="current"
+            ng-model="formdetails.current" -->
+          <label class="form-check-label" for="current">
+            Current Location
+          </label>
+        </div>
+      
+        <div class="form-check">
+          <input
+          ng-model="loc"
+            class="form-check-input"
+            type="radio"
+            name="From"
+            id="other"
+            value="other"
+            ng-click="changeTotal(false)"
+          />
+          <label class="form-check-label" for="other">
+            Other. Please specify zip code:
+          </label>
+        </div>
+<!--  -->
+
+
+<!--  -->
+
+        <md-autocomplete ng-class="(form.autocompleteField.$invalid||!ziplength)&&form.autocompleteField.$touched? 'errorborder' : ''" ng-name="zipcode" ng-disabled="location" style="border: 1px solid #ced4da;border-radius: .25rem;" 
+        md-input-minlength="3" md-input-maxlength="5" md-clear-button="false" ng-pattern="/^[0-9]*$/"
+        ng-required="!location" 
+        md-input-name="autocompleteField" md-selected-item-change="zipchange(selected.postalCode)"
+        md-selected-item="selected" md-search-text="searchZip" md-items="item in getMatches(searchZip)" md-item-text="item.postalCode"  >
+       
+            <md-item-template> <span md-highlight-text="searchZip">{{item.postalCode}}</span>
+            </md-item-template>
+            <!-- <md-not-found>No matches found.</md-not-found> -->
+        </md-autocomplete>
+
+      
+        
+        <div ng-show="(form.autocompleteField.$invalid||!ziplength)&&form.autocompleteField.$touched" style="color:red;font-size: small;">
+          Please enter a zip code
+        </div>
+        
+      </div>
+    </div>
+    <div style="margin-bottom:10px;margin-left: -5px" >
+      <button id="search" type="button" ng-click="search()" name="search" class="btn btn-sm" 
+      
+        ng-disabled="((form.autocompleteField.$invalid||!ziplength) && !location ||form.Keyword.$invalid||location&&form.Keyword.$invalid)||ipapizip"
+        style="background-color: white;margin-right: 30px;">
+        <i class="material-icons">
+            search
+            </i><span style="vertical-align: bottom;">Search</span>
+      </button>
+      <button type="button" id="clear" class="btn btn-sm" ng-click="clear()" style="background-color: white">
+        <i class="material-icons">
+            clear_all
+            </i><span style="vertical-align: bottom;">Clear</span>
+      </button>
+    </div>
+  </form>
+</div>
+
+
+
+<div>
+</div>
+
+
+  <div style="margin-top: 15px;margin-bottom: 10px;">
+  <button 
+    type="button" ng-click="changeMainTab('Results');selectedItem(undefined);show2='1';show='resultTable';" ng-class="mainTab==='Results'? 'btn active' : 'btn'"  style="border-radius: 0.15rem;">
+    Results
+  </button>
+  <button
+    type="button" ng-click="changeMainTab('Wish List'); wishlistsize();selectedItem(undefined);show2='1';show='resultTable'" ng-class="mainTab==='Wish List'? 'btn active' : 'btn'"  style="border-radius: 0.15rem;">
+    Wish List
+  </button>
+  
+  </div>
+
+<div> 
+  
+        
+    <div class="tab-contents">
+      <div class="col-md-9" style="display: inline-block">
+        <div class="progress"  ng-show="loading">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%"></div>
+        </div>
+      </div>
+        <div ng-show="!loading">
+            
+        <div class="tab-content" ng-show="show2=='1'"  style="width: 100%"> 
+            <div ng-show="count&&show==='resultTable'&&!firstLoad" class="col-md-9" style="display: inline-block">
+                
+                <div ng-show="mainTab==='Results'" >
+                <div style="text-align:right">
+                      <button type="button" ng-disabled="selectedItemID==undefined"
+                    type="button" class='btn btn-sm' ng-click="hello2('2','itemInfo')" style="color: black;background-color: #F4F4F4; margin-bottom: 10px;" >
+                        <span style="vertical-align: super;">Details</span>  
+                      <i class="material-icons">
+                            keyboard_arrow_right
+                            </i>
+                      </button>
+                  
+                </div>
+                
+            <table class="table table-dark table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Images</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Shipping</th>
+                    <th scope="col">Zip</th>
+                    <th scope="col">Seller</th>
+                    <th scope="col">Wish List</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr style="white-space: nowrap;" ng-class="selectedItemID==result.itemId[0]?'selectedrow':''" ng-repeat="result in results">
+                      <td scope="row">{{((activepage-1)*10)+$index+1}}</td>
+                      <td ng-if="!result.galleryURL">{{'N/A'}}</td>
+                      <td ng-if="result.galleryURL"><img style="height:150px;width:150px" ng-src={{result.galleryURL[0]}}/></td>
+                      <td ng-if="!result.title[0]">{{'N/A'}}</td>
+                      <td ng-if="result.title[0]"><a ng-click="getItemDetails(result.itemId[0],result.title[0],((activepage-1)*10)+$index);hello2('2','itemInfo')" ng-if="result.title[0].length>35" ><md-tooltip  md-direction="down" style="max-width: 250px;white-space: pre-wrap;height: auto;">{{result.title[0]}}</md-tooltip>{{result.title[0].substring(0,35)}}...</a><a ng-if="!(result.title[0].length>35)"><md-tooltip md-direction="{{demo.tipDirection}}">{{result.title[0]}}</md-tooltip>{{result.title[0]}}</a></td>
+                      <td ng-if="!result.sellingStatus[0].currentPrice">{{'N/A'}}</td>
+                      <td ng-if="result.sellingStatus[0].currentPrice">${{result.sellingStatus[0].currentPrice[0].__value__}}</td>
+                      <td ng-if="!result.shippingInfo[0].shippingServiceCost">{{'N/A'}}</td>
+                      <td ng-if="result.shippingInfo[0].shippingServiceCost"><span ng-if="result.shippingInfo[0].shippingServiceCost[0].__value__=='0.0'">Free Shipping</span><span ng-if="result.shippingInfo[0].shippingServiceCost[0].__value__!='0.0'">${{result.shippingInfo[0].shippingServiceCost[0].__value__}}</span></td>
+                      <td ng-if="!result.postalCode[0]">{{'N/A'}}</td>
+                      <td ng-if="result.postalCode[0]">{{result.postalCode[0]}}</td>
+                      <td>{{result.sellerInfo[0].sellerUserName[0]}}</td>
+                     <td >
+                        <i style="background-color: white;color: #BE8806;
+                        padding: .25rem .5rem;font-size: 1.2rem;
+                        line-height: 1.5;border-radius: .2rem;cursor: pointer;" ng-show="wishlist[result.itemId[0]]" ng-click="deleteWishlist(result.itemId[0])" class="material-icons">
+                            remove_shopping_cart
+                        </i>
+                        <i style="background-color: white;color: black;
+                        padding: .25rem .5rem;font-size: 1.2rem;
+                        line-height: 1.5;border-radius: .2rem;cursor: pointer;" class="material-icons" ng-show="!wishlist[result.itemId[0]]" ng-click="addWishlist(((activepage-1)*10)+$index,result.itemId[0])">
+                            add_shopping_cart
+                        </i>
+                    </td>
+                  </tr>
+                  
+                </tbody>
+              </table>
+              <div style="display:inline-block">
+              <nav>
+                  <ul class="pagination">
+                      <li class="page-item">
+                          <button class="page-link"  aria-label="Previous" ng-class="activepage-1<1 ? 'disable' : 'ppagination'" ng-click="activePage(activepage-1)" >
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                            Previous
+                          </button>
+        
+                      </li>
+                    <li class="page-item" ng-repeat="page in getNumber(pages) track by $index"><button ng-class="$index+1==activepage ? 'active' : 'ppagination'" class="page-link" ng-click="activePage($index+1)">{{$index+1}}</button></li>
+                    <li class="page-item" >
+                        <button class="page-link"  ng-class="activepage+1>pages ? 'disable' : 'ppagination'"  aria-label="Next" ng-click="activePage(activepage+1)">
+                            Next
+                          <span aria-hidden="true">&raquo;</span>
+                          <span class="sr-only">Next</span>
+                        </button>
+                      </li>
+                  </ul>
+                </nav>
+                </div>
+              </div>
+            </div>
+            <div style="text-align: left;display: inline-block" ng-show="!count&&show==='resultTable'&&mainTab==='Results'&&!firstLoad" class="alert alert-warning col-md-9" role="alert">
+                {{Reason}}
+            </div>
+
+            <div ng-show="!loading" class="col-md-9" style="display:inline-block;">
+                <div  ng-show="mainTab==='Wish List'"  style="display: inline-block;width: 100%;">
+                    <div style="text-align:right">
+                        <button type="button" ng-show="show!='itemInfo'" ng-click="hello2('2','itemInfo')" ng-disabled="selectedItemID==undefined"
+                      type="button" class='btn btn-sm' style="color: black;background-color: #F4F4F4;margin-bottom: 10px;" >
+                          <span style="vertical-align: super;">Details</span>  
+                        <i class="material-icons">
+                              keyboard_arrow_right
+                              </i>
+                        </button>
+                    </div>
+                    <div ng-show="show!='itemInfo'">
+                    <table ng-if="wishlistsizeval>0" class="table table-dark table-striped table-hover">
+                        <thead>
+                          <tr style="white-space: nowrap;">
+                            <th scope="col">#</th>
+                            <th scope="col">Images</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Shipping</th>
+                            <th scope="col">Seller</th>
+                            <th scope="col">Wish List</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!-- <tr ng-class="selectedItemIndex==key?'selectedrow':''" ng-repeat="(key, result) in wishlist"> -->
+                            <tr style="white-space: nowrap;" ng-class="selectedItemID==key?'selectedrow':''" ng-repeat="(key, result) in wishlist">  
+                              <td scope="row">{{$index+1}}</td>
+                              <td ng-if="!result.galleryURL">{{'N/A'}}</td>
+                              <td ng-if="result.galleryURL"><img style="width:150px;height:150px" ng-src={{result.galleryURL[0]}}/></td>
+                              <td ng-if="!result.title[0]">{{'N/A'}}</td>
+                              <td ng-if="result.title[0]"><a ng-click="getItemDetails(result.itemId[0],result.title[0],'NA');hello2('2','itemInfo')" ng-if="result.title[0].length>35" ><md-tooltip md-direction="down" style="max-width: 250px;white-space: pre-wrap;height: auto;">{{result.title[0]}}</md-tooltip>{{result.title[0].substring(0,35)}}...</a><a ng-if="!(result.title[0].length>35)"><md-tooltip md-direction="{{demo.tipDirection}}">{{result.title[0]}}</md-tooltip>{{result.title[0]}}</a></td>
+                              <td ng-if="!result.sellingStatus[0].currentPrice">{{'N/A'}}</td>
+                              <td ng-if="result.sellingStatus[0].currentPrice">${{result.sellingStatus[0].currentPrice[0].__value__}}</td>
+                              <td ng-if="!result.shippingInfo[0].shippingServiceCost">{{'N/A'}}</td>
+                              <td ng-if="result.shippingInfo[0].shippingServiceCost"><span ng-if="result.shippingInfo[0].shippingServiceCost[0].__value__=='0.0'">Free Shipping</span><span ng-if="result.shippingInfo[0].shippingServiceCost[0].__value__!='0.0'">${{result.shippingInfo[0].shippingServiceCost[0].__value__}}</span></td>
+                              <td>{{result.sellerInfo[0].sellerUserName[0]}}</td>
+                             <td>
+                                <i style="background-color: white;color: #BE8806;
+                                padding: .25rem .5rem;font-size: 1.2rem;
+                                line-height: 1.5;border-radius: .2rem;cursor: pointer;" ng-show="wishlist[key]" ng-click="deleteWishlist(key)" class="material-icons">
+                                    remove_shopping_cart
+                                </i>
+                            </td>
+                          </tr>
+                          <tr><td></td><td></td><td></td><td></td><td></td><td>Total Shopping</td><td>${{totalCost}}</td></tr>
+                          
+                        </tbody>
+                      </table>
+                    </div> 
+                      <div ng-show="show!='itemInfo'" ng-if="wishlistsizeval==0" style="text-align: left;" class="alert alert-warning" role="alert">
+                          No Records
+                      </div>    
+                    
+                </div>
+              <!-- </div> -->
+          
+                
+          
+            </div>
+
+
+        </div>
+        <div class="tab-contentt" ng-show="show1=='-1'" style="width:100%">
+            <div class="col-md-9" style="display: inline-block">
+                <div class="progress">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%"></div>
+                </div>
+              </div>
+        </div>
+        <div  class="tab-content" ng-show="show2=='2'" style="width: 100%" >
+            <div ng-show="show=='itemInfo'" class="col-md-9" style="display: inline-block">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Product Images </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" >
+                <div class="carousel-inner" style="border:10px solid black">
+                  <div class="carousel-item active">
+                    <img class="d-block w-100" style="cursor:pointer" ng-click="openinNewtab(itemDetails.Item.PictureURL[0])" ng-src={{itemDetails.Item.PictureURL[0]}}  alt="First slide">
+                  </div>
+                
+                  <div ng-if="itemDetails.Item.PictureURL.length>1" style="cursor:pointer" ng-click="openinNewtab(itemPic)" class="carousel-item" ng-repeat="itemPic in itemDetails.Item.PictureURL.slice(1,PictureURL.length)" >
+                    <img class="d-block w-100" ng-src={{itemPic}}>
+                  </div>
+                  
+                </div>
+                <a ng-if="itemDetails.Item.PictureURL.length>1"  class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                  <span style="background-color: black;" class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a ng-if="itemDetails.Item.PictureURL.length>1" class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                  <span style="background-color: black;" class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div><b>{{itemDetails.Item.Title}}</b></div>
+  <div class="row" style="margin-bottom: 3px">
+    
+    <div style="text-align: left;" class="col-6">
+
+    <button type="button" class='btn btn-sm' ng-click="hello2('1','resultTable');activeSubTab='Product';" style="color: black;background-color: #F4F4F4" >
+        <i class="material-icons">
+            keyboard_arrow_left
+            </i><span style="vertical-align: bottom;">List</span>
+      </button>
+  </div>
+      <div style="text-align: right;" class="col-6">
+          <a ng-click="FBapi()" style="cursor: pointer;">
+            <img src="http://csci571.com/hw/hw8/Images/facebook.png" style="height: 30px;width: 30px;vertical-align: top;"/>
+          </a>
+          <i style="background-color: #F4F4F4;color:#BE8806;padding: .25rem .5rem;font-size: 1.2rem;line-height: 1.5;border-radius: .2rem;"  ng-show="wishlist[selectedItemID]" ng-click="deleteWishlist(selectedItemID)" class="material-icons">
+              remove_shopping_cart
+          </i>
+          <i style="background-color: #F4F4F4;color: black;padding: .25rem .5rem;font-size: 1.2rem;line-height: 1.5;border-radius: .2rem;cursor: pointer;" class="material-icons" ng-show="!wishlist[selectedItemID]" ng-click="addWishlist(((activepage-1)*10)+$index,selectedItemID)">
+              add_shopping_cart
+          </i> 
+          
+      </div>
+    </div>
+<div style="text-align: right;margin-bottom: 1px;border-bottom: 1px solid #dee2e6;">
+<button ng-click="switchSubtab('Product')" 
+  type="button" ng-class="activeSubTab=='Product' ? 'btn active paddingsize' : 'btn paddingsize'" style="border-radius: 0.15rem;">
+  Product
+</button>
+<button ng-click="switchSubtab('Photos')" 
+    type="button" ng-class="activeSubTab=='Photos' ? 'btn active paddingsize' : 'btn paddingsize'" style="border-radius: 0.15rem;">
+    Photos
+  </button>
+  <button ng-click="switchSubtab('Shipping')" 
+    type="button" ng-class="activeSubTab=='Shipping' ? 'btn active paddingsize' : 'btn paddingsize'" style="border-radius: 0.15rem;">
+    Shipping
+  </button>
+  <button ng-click="switchSubtab('Seller')" 
+    type="button" ng-class="activeSubTab=='Seller' ? 'btn active paddingsize' : 'btn paddingsize'" style="border-radius: 0.15rem;">
+    Seller
+  </button>
+  <button ng-click="switchSubtab('Similar Products');" 
+    type="button" ng-class="activeSubTab=='Similar Products' ? 'btn active similarProductsbig' : 'btn similarProductsbig'" style="border-radius: 0.15rem;">
+    Similar Products
+  </button>
+  <button ng-click="switchSubtab('Similar Products');" 
+    type="button" ng-class="activeSubTab=='Similar Products' ? 'btn active similarProductssmall' : 'btn similarProductssmall'" style="border-radius: 0.15rem;">
+    Related
+  </button>
+</div>
+          <div ng-show="activeSubTab=='Product'">
+          <table  class="table table-dark table-striped">
+              <tbody>
+                <tr ng-if="itemDetails.Item.PictureURL">
+                  <td style="white-space: nowrap;"><b>Product Images</b></td>
+                  <td><span data-toggle="modal" style="color:#5ba8ae;cursor: pointer;" data-target="#exampleModal">
+                      View Product Images Here
+                  </span></td>
+                </tr>
+                <tr ng-if="itemDetails.Item.Subtitle">
+                  <td style="white-space: nowrap;"><b>Subtitle</b></td>
+                  <td>{{itemDetails.Item.Subtitle}}</td>
+                </tr>
+                <tr ng-if="itemDetails.Item.CurrentPrice.Value">
+                  <td><b>Price</b></td>
+                  <td>${{itemDetails.Item.CurrentPrice.Value}}</td>
+                </tr>
+                <tr ng-if="itemDetails.Item.Location">
+                  <td><b>Location</b></td>
+                  <td>{{itemDetails.Item.Location}}</td>
+                </tr>
+                <tr ng-if="itemDetails.Item.ReturnPolicy">
+                    <td style="white-space: nowrap;"><b>Return Policy</b></td>
+                    <td ng-if="itemDetails.Item.ReturnPolicy.ReturnsWithin">{{itemDetails.Item.ReturnPolicy.ReturnsAccepted+" within "+itemDetails.Item.ReturnPolicy.ReturnsWithin}}</td>
+                    <td ng-if="!itemDetails.Item.ReturnPolicy.ReturnsWithin">{{itemDetails.Item.ReturnPolicy.ReturnsAccepted}}</td>
+                </tr>
+                <tr ng-repeat="ItemSpecific in itemDetails.Item.ItemSpecifics.NameValueList">
+                      <td><b>{{ItemSpecific.Name}}</b></td>
+                      <td>{{ItemSpecific.Value[0]}}</td>
+                </tr>
+                
+              </tbody>
+            </table>
+          </div>
+        <div ng-show="activeSubTab=='Photos'">
+              <div ng-if="!noimages">
+                <div class="row">
+                  <div class="col-md-4" style="padding:5px">
+                      <img ng-if="photos.items[0].link" ng-click="openinNewtab(photos.items[0].link)" class="d-block w-100" style="border:5px solid black;margin-bottom: 10px;cursor: pointer;" ng-src={{photos.items[0].link}}>
+                      <img ng-if="!photos.items[0].link" ng-click="openinNewtab('no-image.png')" class="d-block w-100" style="border:5px solid black;margin-bottom: 10px;cursor: pointer;" ng-src="no-image.png">
+                      <img ng-if="photos.items[3].link" ng-click="openinNewtab(photos.items[3].link)" class="d-block w-100" style="border:5px solid black;margin-bottom: 10px;cursor: pointer;" ng-src={{photos.items[3].link}}>
+                      <img ng-if="!photos.items[3].link" ng-click="openinNewtab('no-image.png')" class="d-block w-100" style="border:5px solid black;margin-bottom: 10px;cursor: pointer;" ng-src="no-image.png">
+                     
+                  </div>
+                  <div class="col-md-4" style="padding:5px" >
+                      <img ng-if="photos.items[1].link" ng-click="openinNewtab(photos.items[1].link)" class="d-block w-100" style="border:5px solid black;margin-bottom: 10px;cursor: pointer;" ng-src={{photos.items[1].link}}>
+                      <img ng-if="!photos.items[1].link" ng-click="openinNewtab('no-image.png')" class="d-block w-100" style="border:5px solid black;margin-bottom: 10px;cursor: pointer;" ng-src="no-image.png">
+                      <img ng-if="photos.items[4].link" ng-click="openinNewtab(photos.items[4].link)" class="d-block w-100" style="border:5px solid black;margin-bottom: 10px;cursor: pointer;" ng-src={{photos.items[4].link}}>
+                      <img ng-if="!photos.items[4].link" ng-click="openinNewtab('no-image.png')" class="d-block w-100" style="border:5px solid black;margin-bottom: 10px;cursor: pointer;" ng-src="no-image.png">
+                      <img ng-if="photos.items[6].link" ng-click="openinNewtab(photos.items[6].link)" class="d-block w-100" style="border:5px solid black;margin-bottom: 10px;cursor: pointer;" ng-src={{photos.items[6].link}}>
+                      <img ng-if="!photos.items[6].link" ng-click="openinNewtab('no-image.png')" class="d-block w-100" style="border:5px solid black;margin-bottom: 10px;cursor: pointer;" ng-src="no-image.png">
+                    
+                  </div>
+                  <div class="col-md-4" style="padding:5px" >
+                      <img ng-if="photos.items[2].link" ng-click="openinNewtab(photos.items[2].link)" class="d-block w-100" style="border:5px solid black;margin-bottom: 10px;cursor: pointer;" ng-src={{photos.items[2].link}} >
+                      <img ng-if="!photos.items[2].link" ng-click="openinNewtab('no-image.png')" class="d-block w-100" style="border:5px solid black;margin-bottom: 10px;cursor: pointer;" ng-src="no-image.png">
+                      <img ng-if="photos.items[5].link" ng-click="openinNewtab(photos.items[5].link)" class="d-block w-100" style="border:5px solid black;margin-bottom: 10px;cursor: pointer;" ng-src={{photos.items[5].link}}>
+                      <img ng-if="!photos.items[5].link" ng-click="openinNewtab('no-image.png')" class="d-block w-100" style="border:5px solid black;margin-bottom: 10px;cursor: pointer;" ng-src="no-image.png">
+                      <img ng-if="photos.items[7].link" ng-click="openinNewtab(photos.items[7].link)" class="d-block w-100" style="border:5px solid black;margin-bottom: 10px;cursor: pointer;" ng-src={{photos.items[7].link}}>
+                      <img ng-if="!photos.items[7].link" ng-click="openinNewtab('no-image.png')" class="d-block w-100" style="border:5px solid black;margin-bottom: 10px;cursor: pointer;" ng-src="no-image.png">
+                  </div>
+                </div>
+              </div>
+              <div ng-if="noimages" style="text-align: left;" class="alert alert-warning" role="alert">
+                  No Images Available
+              </div>
+        </div>
+     
+      <div ng-show="activeSubTab=='Shipping'">
+        <table  class="table table-dark table-striped">
+          <tbody>
+            <tr ng-if="selectedItemDetails.shippingInfo[0].shippingServiceCost">
+              <td><b>Shipping Cost</b></td>
+              <td><span ng-if="selectedItemDetails.shippingInfo[0].shippingServiceCost[0].__value__=='0.0'">Free Shipping</span><span ng-if="selectedItemDetails.shippingInfo[0].shippingServiceCost[0].__value__!='0.0'">${{selectedItemDetails.shippingInfo[0].shippingServiceCost[0].__value__}}</span></td></td>
+              
+            </tr>
+            <tr ng-if="selectedItemDetails.shippingInfo[0].shipToLocations">
+              <td><b>Shipping Locations</b></td>
+              <td>{{selectedItemDetails.shippingInfo[0].shipToLocations[0]}}</span></td>
+            </tr>
+            <tr ng-if="selectedItemDetails.shippingInfo[0].handlingTime">
+              <td><b>Handling Time</b></td>
+              <td><span ng-if="selectedItemDetails.shippingInfo[0].handlingTime[0]>'1'">{{selectedItemDetails.shippingInfo[0].handlingTime[0]}} days</span><span ng-if="selectedItemDetails.shippingInfo[0].handlingTime[0]<'2'">{{selectedItemDetails.shippingInfo[0].handlingTime[0]}} day</span></td>
+            </tr>
+            <tr ng-if="selectedItemDetails.shippingInfo[0].expeditedShipping">
+              <td><b>Expedited Shipping</b></td>
+              <td ng-if="selectedItemDetails.shippingInfo[0].expeditedShipping[0]=='true'"><i style="color:green" class="material-icons">
+                  done
+              </i></td>
+              <td ng-if="selectedItemDetails.shippingInfo[0].expeditedShipping[0]=='false'"><i style="color:red" class="material-icons">
+                  clear
+              </i></td>
+            </tr>
+            <tr ng-if="selectedItemDetails.shippingInfo[0].oneDayShippingAvailable">
+                <td><b>One Day Shipping</b></td>
+                <td ng-if="selectedItemDetails.shippingInfo[0].oneDayShippingAvailable[0]=='true'"><i style="color:green" class="material-icons">
+                    done
+                    </i></td>
+                <td ng-if="selectedItemDetails.shippingInfo[0].oneDayShippingAvailable[0]=='false'"><i style="color:red" class="material-icons">
+                    clear
+                </i></td>
+          </tr>
+            <tr ng-if="selectedItemDetails.returnsAccepted">
+                <td><b>Return Accepted</b></td>
+                <td ng-if="selectedItemDetails.returnsAccepted[0]=='true'"><i style="color:green" class="material-icons">
+                    done
+                    </i></td>
+                <td ng-if="selectedItemDetails.returnsAccepted[0]=='false'"><i style="color:red" class="material-icons">
+                    clear
+                </i></td>
+            </tr>
+            
+            
+          </tbody>
+        </table>
+      </div>
+      <div ng-show="activeSubTab=='Seller'">
+          <table  class="table table-dark table-striped">
+              <tbody>
+                <tr><td colspan="2" style="text-align: center;"><b>{{selectedItemDetails.sellerInfo[0].sellerUserName[0].toUpperCase()}}</b></td></tr>
+                <tr ng-if="itemDetails.Item.Seller.FeedbackScore!=undefined">
+                  <td><b>Feedback Score</b></td>
+                  <td>{{itemDetails.Item.Seller.FeedbackScore}}</td>
+                </tr>
+                <tr ng-if="itemDetails.Item.Seller.PositiveFeedbackPercent!=undefined">
+                  <td><b>Popularity</b></td>
+                  <td><div class="progress-wrapper">
+                      <div class="pprogress">
+                        {{itemDetails.Item.Seller.PositiveFeedbackPercent}}
+                      </div><round-progress
+                                    max="100"
+                                    current="itemDetails.Item.Seller.PositiveFeedbackPercent"
+                                    color="#2D662F"
+                                    radius="15"
+                                    stroke="2"
+                                    semi="false"
+                                    rounded="true"
+                                    clockwise="false"
+                                    responsive="false"
+                                    duration="800"
+                                    animation="easeInOutQuart"
+                                    animation-delay="0">
+                                  </round-progress>
+                                  
+                                </div></td>
+                </tr>
+                <tr ng-if="itemDetails.Item.Seller.FeedbackRatingStar!=undefined">
+                  <td><b>Feedback Rating Star</b></td>
+                  <td ng-if="itemDetails.Item.Seller.FeedbackScore>=10000"><i ng-style="myStyle" class="material-icons">
+                      stars
+                      </i>
+                  </td>
+                  <td ng-if="itemDetails.Item.Seller.FeedbackRatingStar!='None' && !(itemDetails.Item.Seller.FeedbackScore>=10000)">
+                      <i  ng-style="myStyle" class="material-icons">
+                          star_border
+                        </i>
+                  </td>
+                  <td ng-if="itemDetails.Item.Seller.FeedbackRatingStar=='None'">
+                     None
+                  </td>
+                 
+                  
+                </tr>
+                <tr ng-if="itemDetails.Item.Seller.TopRatedSeller!=undefined">
+                  <td><b>Top Rated</b> </td>
+                  <td ng-if="itemDetails.Item.Seller.TopRatedSeller==true"><i style="color:green" class="material-icons">
+                      done
+                      </i>
+                  </td>
+                  <td ng-if="itemDetails.Item.Seller.TopRatedSeller==false"><i style="color:red" class="material-icons">
+                      clear
+                  </i>
+                  </td>
+                </tr>
+                <tr ng-if="itemDetails.Item.Storefront!=undefined">
+                    <td><b>Store Name</b></td>
+                    <td ng-if="itemDetails.Item.Storefront.StoreName">{{itemDetails.Item.Storefront.StoreName}}</td>
+              </tr>
+                <tr ng-if="itemDetails.Item.Storefront!=undefined">
+                    <td><b>Buy Product At</b></td>
+                    <td ng-if="itemDetails.Item.Storefront.StoreURL">
+                    <span ng-click="openinNewtab(itemDetails.Item.Storefront.StoreURL)" style="color:#5ba8ae;cursor: pointer;" >
+                        Store
+                    </span>    
+                        </td>
+                </tr>
+              </tbody>
+            </table>
+      </div>
+      <div ng-show="activeSubTab=='Similar Products'" >
+        
+        <div  class="row">
+          <select class="form-control col-md-3 marginclass"  ng-change="sorting()" ng-model="sortColumn">
+              <option value="">Default</option>
+              <option value="title">Product Name</option>
+              <option value="buyItNowPrice.__value__">Price</option>
+              <option value="shippingCost.__value__">Shipping Cost</option>
+              <option value="timeLeft">Days Left</option>
+            </select>
+            <select ng-disabled="sortColumn==''" ng-change="sorting()" class="form-control col-md-3 marginclass2" ng-model="ascdsc">
+                <option value="+">Ascending</option>
+                <option value="-">Descending</option>
+            </select>
+          </div>
+           <table class="table table-dark" ng-if="getSimilarItems.length>0">
+              <tbody>
+                <tr ng-repeat="getSimilarItem in getSimilarItems | orderBy: order | limitTo:limit " >
+                
+              <td class="row" style="border: 3px solid white;"><div class="col-sm-12 col-md-2" ><img ng-src={{getSimilarItem.imageURL}} style="width:150px;height:150px; " ></div>
+                <div class="col-sm-12 col-md-10" style="margin-top: 15px;">
+                <div ><a style="color:#648A8E !important" href={{getSimilarItem.viewItemURL}}>{{getSimilarItem.title}}</a>
+                </div>
+              
+                <div style="color:#91b28c">
+                    Price: {{getSimilarItem.buyItNowPrice.__value__}}
+                </div>
+                <div style="color:#b49d71">
+                    Shipping Cost: ${{getSimilarItem.shippingCost.__value__}}
+                </div>
+                <div>
+                    Days Left: {{getSimilarItem.timeLeft}}
+                </div>
+              </div>
+            </td>
+
+                </tr>
+              </tbody>
+            </table>
+            <div style="margin-bottom:10px">
+              <button class="btn active"  ng-if="showMoreButton" ng-click="showMore()">Show More</button>
+              <button class="btn active"  ng-if="showLessButton" ng-click="showLess()">Show Less</button>
+            </div>
+              <div ng-if="getSimilarItems.length==0" style="text-align: left;" class="alert alert-warning" role="alert">
+                  No Records
+              </div> 
+
+
+      </div>
+      </div>
+        </div>
+      </div>
+       
+    </div>
+</div>      
+ 
+     
+  
+    <!-- <div ng-show="!loading" class="col-md-9" style="display:inline-block;">
+      <div  ng-show="mainTab==='Wish List'"  style="display: inline-block;width: 100%;">
+          <div style="text-align:right">
+              <button type="button" ng-show="show!='itemInfo'" ng-click="hello2('2','itemInfo')" ng-disabled="selectedItemID==undefined"
+            type="button" class='btn btn-sm' style="color: black;background-color: #F4F4F4;margin-bottom: 10px;" >
+                <span style="vertical-align: super;">Details</span>  
+              <i class="material-icons">
+                    keyboard_arrow_right
+                    </i>
+              </button>
+          </div>
+          <div ng-show="show!='itemInfo'">
+          <table ng-if="wishlistsizeval>0" class="table table-dark table-striped table-hover">
+              <thead>
+                <tr style="white-space: nowrap;">
+                  <th scope="col">#</th>
+                  <th scope="col">Images</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Shipping</th>
+                  <th scope="col">Seller</th>
+                  <th scope="col">Wish List</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <tr style="white-space: nowrap;" ng-class="selectedItemID==key?'selectedrow':''" ng-repeat="(key, result) in wishlist">  
+                    <td scope="row">{{$index+1}}</td>
+                    <td ng-if="!result.galleryURL">{{'N/A'}}</td>
+                    <td ng-if="result.galleryURL"><img style="width:150px;height:150px" ng-src={{result.galleryURL[0]}}/></td>
+                    <td ng-if="!result.title[0]">{{'N/A'}}</td>
+                    <td ng-if="result.title[0]"><a ng-click="getItemDetails(result.itemId[0],result.title[0],'NA');hello2('2','itemInfo')" ng-if="result.title[0].length>35" ><md-tooltip md-direction="down" style="max-width: 250px;white-space: pre-wrap;height: auto;">{{result.title[0]}}</md-tooltip>{{result.title[0].substring(0,35)}}...</a><a ng-if="!(result.title[0].length>35)"><md-tooltip md-direction="{{demo.tipDirection}}">{{result.title[0]}}</md-tooltip>{{result.title[0]}}</a></td>
+                    <td ng-if="!result.sellingStatus[0].currentPrice">{{'N/A'}}</td>
+                    <td ng-if="result.sellingStatus[0].currentPrice">${{result.sellingStatus[0].currentPrice[0].__value__}}</td>
+                    <td ng-if="!result.shippingInfo[0].shippingServiceCost">{{'N/A'}}</td>
+                    <td ng-if="result.shippingInfo[0].shippingServiceCost"><span ng-if="result.shippingInfo[0].shippingServiceCost[0].__value__=='0.0'">Free Shipping</span><span ng-if="result.shippingInfo[0].shippingServiceCost[0].__value__!='0.0'">${{result.shippingInfo[0].shippingServiceCost[0].__value__}}</span></td>
+                    <td>{{result.sellerInfo[0].sellerUserName[0]}}</td>
+                   <td>
+                      <i style="background-color: white;color: #BE8806;
+                      padding: .25rem .5rem;font-size: 1.2rem;
+                      line-height: 1.5;border-radius: .2rem;cursor: pointer;" ng-show="wishlist[key]" ng-click="deleteWishlist(key)" class="material-icons">
+                          remove_shopping_cart
+                      </i>
+                  </td>
+                </tr>
+                <tr><td></td><td></td><td></td><td></td><td></td><td>Total Shopping</td><td>${{totalCost}}</td></tr>
+                
+              </tbody>
+            </table>
+          </div> 
+            <div ng-show="show!='itemInfo'" ng-if="wishlistsizeval==0" style="text-align: left;" class="alert alert-warning" role="alert">
+                No Records
+            </div>    
+          
+      </div>
+    </div>
+
+      
+
+  </div> -->
+<!-- </div> -->
+      
+      
+    
+
+  </div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+crossorigin="anonymous"></script>
+<script
+src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.js"></script> 
+ <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-aria.min.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-messages.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.4/angular-material.min.js"></script>
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-svg-round-progressbar/0.4.8/roundProgress.min.js"></script>
+ 
+<script src="./Results.js"></script>
+</body>
+</html>
