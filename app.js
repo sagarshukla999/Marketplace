@@ -6,11 +6,6 @@ const app=express()
 app.use(cors())
 
 
-//FBappid 352217348744266
-//"http://svcs.ebay.com/MerchandisingService?OPERATION-NAME=getSimilarItems&SERVICE-NAME=MerchandisingService&SERVICE-VERSION=1.1.0&CONSUMER-ID=SagarShu-USCHW6-PRD-116e557a4-fbe3149c&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&itemId=183383599015&maxResults=20"
-//APIkey google - AIzaSyCUMNx1tT-8wNaBm_2x-5oS_OSNpWA0MSM
-// Search engine ID 005325147766991334352:wbuzaqurjd8
-
 
 var path = require('path');
 app.use(express.static(path.join(__dirname, 'public')));
